@@ -1,31 +1,13 @@
-# --------------------------------------------- #
-# Note: this file originates in template-docker #
-# --------------------------------------------- #
-
 services:
-  # ---- mega-linter ---- #
-  lint:
-    profiles: ["dev"]
-    image: oxsecurity/megalinter:v6.15.0
-    volumes:
-      - ./:/tmp/lint
-    environment:
-      MEGALINTER_CONFIG: .github/linters/.mega-linter.yml
-      REPORT_OUTPUT_FOLDER: none
-      VALIDATE_ALL_CODEBASE: true
-
-  # ---- readme generator ---- #
-  readme:
-    profiles: ["dev"]
-    image: pandoc/minimal:2.19
-    volumes:
-      - ./:/data
-    command: --defaults=.pandoc.yml
-
-  # ---- app ---- #
-  app:
-    profiles: ["app"]
-    privileged: true
-    build: .
-    env_file:
-      - .env
+    vscode-server:
+        container_name: vscode-server
+        hostname: vscode
+        ports:
+            - '8000:8000'
+        environment:
+            - VSCODE_KEYRING_PASS=mysecretpassword
+            - VSCODE_SERVE_MODE=serve-local
+        volumes:
+            - './data:/root/.vscode-server'
+        build: .
+        
